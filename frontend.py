@@ -30,8 +30,8 @@ class MainWindow(Screen):
     time = ObjectProperty(None)
     num_Recommendations = ObjectProperty(None)
     birth_year = ObjectProperty(None)
-    # male = ObjectProperty(None)
-    # female = ObjectProperty(None)
+    male = ObjectProperty(None)
+    female = ObjectProperty(None)
 
     gender = {'M': False, 'F': True}
 
@@ -46,7 +46,9 @@ class MainWindow(Screen):
         self.time.text = ""
         self.num_Recommendations.text = ""
         self.birth_year.text = ""
-        # self.gender.text = ""
+        self.male.active = False
+        self.female.active = False
+
 
     def valid_loc(self,location):
         return True
