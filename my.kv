@@ -5,7 +5,8 @@
     time: time
     num_Recommendations: num_Recommendations
     birth_year: birth_year
-    gender: gender
+    female: female
+    male: male
 
     canvas.before:
         Rectangle:
@@ -14,12 +15,20 @@
             source: 'bg.png'
 
     GridLayout:
+
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 0.7
+            Rectangle:
+                pos: self.pos
+                size: self.size
         cols: 1
-        size: root.width * 0.6, root.height * 0.7
+        size: root.width * 0.6, root.height * 1.5
         row_default_height: 40
         row_force_default: True
-        size_hint_x:0.5
-        center: root.width/3 , root.height/3
+        size_hint_x:0.47
+        size_hint_y:0.7
+        center: root.width/3 , root.height
 
         Label:
             text:"current location: "
@@ -71,18 +80,41 @@
             font_size: 20
             multiline: False
 
-        Label:
-            text:"Gender: "
-            font_size: 30
-            color:(0,0,0,1)
-            bold: True
-            font_name: 'SouthDjakartaDemo.ttf'
 
-        TextInput:
-            id: gender
-            font_size: 20
-            multiline: False
+        GridLayout:
 
+            cols: 4
+            size: root.width, root.height
+            row_default_height: 40
+            background_color: (0,0,1,1)
+
+
+            Label:
+                text:"Female: "
+                font_size: 30
+                color:(0,0,0,1)
+                bold: True
+                font_name: 'SouthDjakartaDemo.ttf'
+                bcolor: 1,0,0,1
+
+
+            CheckBox:
+                id: female
+                group: 'gender'
+                visible: True
+                on_active: root.active_female()
+
+            Label:
+                text:"Male: "
+                font_size: 30
+                color:(0,0,0,1)
+                bold: True
+                font_name: 'SouthDjakartaDemo.ttf'
+
+            CheckBox:
+                id: male
+                group: 'gender'
+                on_active: root.active_male()
 
         Button:
             font_size: 30
@@ -92,10 +124,15 @@
                 root.searchBtn()
 
 
+
+
+
+
 <Pop>:
 
     pop_text: pop_text
     popBtn: popBtn
+
 
     GridLayout:
 
@@ -114,7 +151,3 @@
             text: "try again"
             font_name: 'SouthDjakartaDemo.ttf'
             on_release: root.closeBtn()
-
-
-
-
