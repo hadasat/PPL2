@@ -68,7 +68,7 @@ class MainWindow(Screen):
         # the input is valid so we search for recommendations
         else:
             try:
-                rec = getRecommandations(self.recommendations, self.time, self.current_location, self.birth_year,self.gender)
+                rec = getRecommandations(int(self.recommendations), int(self.time), self.current_location, int(self.birth_year),int(self.gender))
             except:
                 rec = ["Some error occurred :(", "Ofir fix it please"]
             finally:
