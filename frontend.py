@@ -77,9 +77,10 @@ class MainWindow(Screen):
             except NameError:
                 rec = [NameError]
             finally:
-                if "Some error occurred :(":
-                    rec = rec + "ofir fix it"
-                print("\n".join(rec))
+                if rec == "Some error occurred :(":
+                    rec = [rec, "ofir fix it"]
+                if not rec:
+                    rec = ["with those input you", "better stay at home"]
             content = Pop("\n".join(rec))
             title = "Recommendations"
 
