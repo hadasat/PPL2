@@ -68,10 +68,17 @@ class MainWindow(Screen):
         # the input is valid so we search for recommendations
         else:
             try:
-                rec = getRecommandations(int(self.recommendations), int(self.time), self.current_location, int(self.birth_year),int(self.gender))
-            except:
-                rec = ["Some error occurred :(", "Ofir fix it please"]
+                print(self.num_Recommendations.text)
+                number_of_recommendations = int(self.num_Recommendations.text)
+                trip_duration_min = int(self.time.text)
+                start_station = self.current_location.text
+                birth_year = int(self.birth_year.text)
+                rec = getRecommandations(number_of_recommendations,trip_duration_min,start_station,birth_year,self.gender)
+            except NameError:
+                rec = [NameError]
             finally:
+                if "Some error occurred :(":
+                    rec = rec + "ofir fix it"
                 print("\n".join(rec))
             content = Pop("\n".join(rec))
             title = "Recommendations"
