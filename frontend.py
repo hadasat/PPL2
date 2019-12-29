@@ -1,14 +1,9 @@
 from kivy.app import App
-from kivy.lang import Builder
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
-from kivy.uix.label import Label
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
-from kivy.uix.checkbox import CheckBox
-
+from backend import getRecommandations
 
 popup = {}
 
@@ -18,14 +13,13 @@ class Pop(Widget):
 
     def __init__(self, results):
         Widget.__init__(self)
-        self.pop_text.text = results+"\n"+results+"\n"+results+"\n"+results+"\n"+results+"\n"+results+"\n"+results+"\n"+results+"\n"+results+"\n"+results+"\n"
+        self.pop_text.text = results
 
     def closeBtn(self):
-        print("h")
         popup["p"].dismiss()
 
-
 class MainWindow(Screen):
+    # all labels
     current_location = ObjectProperty(None)
     time = ObjectProperty(None)
     num_Recommendations = ObjectProperty(None)
@@ -33,13 +27,15 @@ class MainWindow(Screen):
     male = ObjectProperty(None)
     female = ObjectProperty(None)
 
-    gender = {'M': False, 'F': True}
-
+    gender = 2
 
     def searchBtn(self):
+        error_list = self.is_valid_input()
+        if error_list.__len__() == 0:
+            self.recommendations([])
+        else:
+            self.recommendations("\n".join(error_list))
         self.reset()
-        list_rec = ""
-        self.recommendations(list_rec)
 
     def reset(self):
         self.current_location.text = ""
@@ -48,40 +44,57 @@ class MainWindow(Screen):
         self.birth_year.text = ""
         self.male.active = False
         self.female.active = False
+        self.gender = 2
 
+    # check if the input is valid
+    def is_valid_input(self):
+        errors_list = []
+        if self.current_location.text == "":
+            errors_list.append("you need to insert current location")
+        if not self.time.text.isdigit():
+            errors_list.append("time must be numeric value")
+        if not self.num_Recommendations.text.isdigit():
+            errors_list.append("recommendations must be numeric value")
+        if not self.birth_year.text.isdigit():
+            errors_list.append("birth year must be numeric value")
+        return errors_list
 
-    def valid_loc(self,location):
-        return True
-
-    def is_valid_input(self, start_loc, time, rec_num, gender, b_year):
-        valid_loc = self.valid_loc(self, start_loc)
-        valid_date = time.isdigit()
-        valid_rec = rec_num.isdigit()
-        valid_gender = gender == 1 or gender == 0
-        valid_yaer = b_year.isdigit()
-        return valid_date and valid_gender and valid_loc and valid_rec and valid_yaer
-
+    # create a pop up with the error or the recommendations
     def recommendations(self, rec):
-        if rec is None:
-            content = Pop("pleas try again")
-            title = "bad input"
+        # this case the input is invalid
+        if type(rec) is str:
+            content = Pop(rec)
+            title = "Bad input"
+        # the input is valid so we search for recommendations
         else:
-            content = Pop("hello")
+            try:
+                rec = getRecommandations(self.recommendations, self.time, self.current_location, self.birth_year,self.gender)
+            except:
+                rec = ["Some error occurred :(", "Ofir fix it please"]
+            finally:
+                print("\n".join(rec))
+            content = Pop("\n".join(rec))
             title = "Recommendations"
-        popup['p'] = Popup(title=title, content=content, size_hint=(0.52,0.8))
+
+        popup['p'] = Popup(title=title, content=content, size_hint=(0.52, 0.8))
         popup['p'].open()
-        print('hadas')
 
     def active_female(self):
-        self.gender['F'] = True
-        self.gender['M'] = False
+        if self.female.active:
+            self.gender = 0
+        else:
+            self.gender = 2
 
     def active_male(self):
-        self.gender['F'] = False
-        self.gender['M'] = True
+        if self.male.active:
+            self.gender = 1
+        else:
+            self.gender = 2
+
 
 class MyApp(App):
     def build(self):
+        self.title = 'Recommendations App'
         return MainWindow()
 
 

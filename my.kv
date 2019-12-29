@@ -134,23 +134,30 @@
 <Pop>:
 
     pop_text: pop_text
-    popBtn: popBtn
+#    popBtn: popBtn
 
 
     GridLayout:
 
-        cols: 2
+        cols: 1
+        row: 2
         size: root.width, root.height*0.2
         center: self.parent.width , self.parent.height*0.65
         Label:
             id: pop_text
-            font_size: 25
+            text: "Search for Recomandetion"
+            font_size: 20
             color:(0,0,0,1)
             font_name: 'SouthDjakartaDemo.ttf'
             bold: True
 
-        Button:
-            id: popBtn
-            text: "try again"
-            font_name: 'SouthDjakartaDemo.ttf'
-            on_release: root.closeBtn()
+
+  #
+        # Button:
+        #
+        #     id: popBtn
+        #     text: "try again"
+        #     font_name: 'SouthDjakartaDemo.ttf'
+        #     on_release: root.closeBtn()
+        #     x: root.x
+        #     top: self.height and root.y + root.height * 0.69
