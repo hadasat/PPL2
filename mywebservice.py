@@ -55,7 +55,6 @@ def getIdOfStation(stationName,dataset):
 
 def getRecommandations(k, TripDurationinmin, StartStation, BirthYear, Gender):
     dataset = getDataSet()
-    print(dataset["StartStationName"][0])
     station_id = getIdOfStation(StartStation,dataset)
     if station_id == "error":
         return "error: station not found"
@@ -85,6 +84,7 @@ def home():
 
     try:
         recommendations = getRecommandations(number_of_recommendations, trip_duration_min, start_station, birth_year, gender)
+        print(recommendations)
         return jsonify(recommendations)
     except:
         return jsonify("Some error occurred :(")

@@ -77,8 +77,8 @@ class MainWindow(Screen):
             except NameError:
                 rec = [NameError]
             finally:
-                if rec == "Some error occurred :(":
-                    rec = [rec, "ofir fix it"]
+                if type(rec) == str:
+                    rec = [rec, "please try again"]
                 if not rec:
                     rec = ["with those input you", "better stay at home"]
             content = Pop("\n".join(rec))
