@@ -5,7 +5,6 @@ from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 from backend import getRecommandations
 
-popup = {}
 
 class Pop(Widget):
 
@@ -14,9 +13,6 @@ class Pop(Widget):
     def __init__(self, results):
         Widget.__init__(self)
         self.pop_text.text = results
-
-    def closeBtn(self):
-        popup["p"].dismiss()
 
 class MainWindow(Screen):
     # all labels
@@ -29,6 +25,7 @@ class MainWindow(Screen):
 
     gender = 2
 
+    # the submit button: first check if the input is valid then pop up a massage
     def searchBtn(self):
         error_list = self.is_valid_input()
         if error_list.__len__() == 0:
@@ -68,7 +65,6 @@ class MainWindow(Screen):
         # the input is valid so we search for recommendations
         else:
             try:
-                print(self.num_Recommendations.text)
                 number_of_recommendations = int(self.num_Recommendations.text)
                 trip_duration_min = int(self.time.text)
                 start_station = self.current_location.text
@@ -77,15 +73,15 @@ class MainWindow(Screen):
             except NameError:
                 rec = [NameError]
             finally:
+                # there was some problem with the search
                 if type(rec) == str:
                     rec = [rec, "please try again"]
-                if not rec:
-                    rec = ["with those input you", "better stay at home"]
+
             content = Pop("\n".join(rec))
             title = "Recommendations"
 
-        popup['p'] = Popup(title=title, content=content, size_hint=(0.52, 0.8))
-        popup['p'].open()
+        popup = Popup(title=title, content=content, size_hint=(0.52, 0.8))
+        popup.open()
 
     def active_female(self):
         if self.female.active:
