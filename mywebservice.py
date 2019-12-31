@@ -11,7 +11,7 @@ from flask import request
 from flask import request
 import sqlite3
 
-
+# return data frame represent the data set from the db
 def getDataSet():
     conn = sqlite3.connect('bikeShare.db')
     df = pd.read_sql_query("SELECT * FROM bikeShareTable", conn)
@@ -20,11 +20,14 @@ def getDataSet():
 
 app = Flask(__name__)
 
+# parameters: list of tuples contains [station: string, probability: int] and number k
+# return the k tuples with the heighest probability
 def getKMostProbability(tuples, k):
     sortedTuples = sorted(tuples, key=lambda x: x[1], reverse=True)
     return sortedTuples[:k]
 
-
+# get k recommandations. this method build the dt model with the given data.
+# id there is no k results, the function try again with depth -1
 def getKRecommendations(dataset,k, x_input, initDepth=15):
     clf = tree.DecisionTreeClassifier(max_depth=initDepth)
     features = ["TripDurationinmin", "StartStationID", "BirthYear", "Gender"]
@@ -44,7 +47,7 @@ def getKRecommendations(dataset,k, x_input, initDepth=15):
 
     return onlyClassesName
 
-
+# return id of stations by station name
 def getIdOfStation(stationName,dataset):
     x = dataset[["StartStationID", "StartStationName"]]
     list_stations = x.values.tolist()
@@ -53,6 +56,7 @@ def getIdOfStation(stationName,dataset):
             return value[0]
     return "error"
 
+# returns  k recommandations with given parameters.
 def getRecommandations(k, TripDurationinmin, StartStation, BirthYear, Gender):
     dataset = getDataSet()
     station_id = getIdOfStation(StartStation,dataset)
